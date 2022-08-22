@@ -11,5 +11,5 @@ jobs:
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
           https://api.github.com/repos/arm2148/testing/dispatches \
-          -d '{"event_type":"asdf_fdsa","client_payload":{"passed":false,"integration":true}}'
+          -d '{"event_type":"asdf_fdsa","client_payload":{"passed":false,"integration":true,"message":"This is a message"}}'
 
