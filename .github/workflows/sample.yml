@@ -5,11 +5,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: curl step
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            src:
+              - 'src/**'
+
+      # run only if some file in 'src' folder was changed
+      - if: steps.changes.outputs.src == 'true'
         run: |
-          curl -X POST \
-          -H "Accept: application/vnd.github+json" \
-          -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
-          https://api.github.com/repos/arm2148/testing/dispatches \
-          -d '{"event_type":"asdf_fdsa","client_payload":{"passed":false,"integration":true,"message":"This is a message"}}'
+            
+            curl -X POST \
+                -H "Accept: application/vnd.github+json" \
+                -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
+                https://api.github.com/repos/arm2148/testing/dispatches \
+                -d '{"event_type":"asdf_fdsa","client_payload":{"passed":false,"integration":true,"message":"This is a message"}}'
 
