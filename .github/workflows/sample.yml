@@ -6,14 +6,20 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: dorny/paths-filter@v2
-        id: changes
+        id: project-1-changed
         with:
           filters: |
             src:
-              - 'src/**'
+              - 'project1/**'
+      - uses: dorny/paths-filter@v2
+        id: project-2-changed
+        with:
+          filters: |
+            src:
+              - 'project2/**'
 
       # run only if some file in 'src' folder was changed
-      - if: steps.changes.outputs.src == 'true'
+      - if: steps.project-1-changed.outputs.src == 'true'
         run: |
             
             curl -X POST \
@@ -21,4 +27,6 @@ jobs:
                 -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
                 https://api.github.com/repos/arm2148/testing/dispatches \
                 -d '{"event_type":"asdf_fdsa","client_payload":{"passed":false,"integration":true,"message":"This is a message"}}'
+      - if: steps.project-2-changed.outputs.src == 'true'
+        run: echo "Project 2 changed"
 
